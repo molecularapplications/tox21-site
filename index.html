@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tox21 Leaderboard — Toxicity Prediction Standings</title>
+<meta name="description" content="A live mirror of the reproducible Tox21 Challenge leaderboard: how machine-learning methods rank at predicting twelve toxic effects of small molecules." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0e0c;
+    --panel: #10160f;
+    --panel-2: #141c12;
+    --line: #233022;
+    --ink: #e8f1e6;
+    --muted: #8aa087;
+    --dim: #5e7159;
+    --glow: #5fe3a1;       /* assay fluorescence green */
+    --glow-soft: #5fe3a133;
+    --amber: #e8b24a;      /* hazard accent */
+    --bar-track: #1b2419;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background:
+      radial-gradient(120% 80% at 80% -10%, #11251a 0%, transparent 55%),
+      radial-gradient(90% 70% at 0% 0%, #0e1b14 0%, transparent 50%),
+      var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* faint assay-plate grid overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ---- Header ---- */
+  header { margin-bottom: 40px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--glow);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 5px 12px;
+    background: var(--glow-soft);
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--glow);
+    box-shadow: 0 0 10px var(--glow);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(38px, 7vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 20px 0 0;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--glow);
+  }
+
+  .lede {
+    max-width: 620px;
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .lede a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--dim); }
+  .lede a:hover { text-decoration-color: var(--glow); color: var(--glow); }
+
+  /* ---- Meta strip ---- */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    margin-top: 32px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .meta .stat .k {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+  .meta .stat .v {
+    font-family: "Fraunces", serif; font-size: 26px; color: var(--ink); margin-top: 2px;
+  }
+  .meta .stat .v small { font-size: 13px; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+
+  /* ---- Table ---- */
+  .board {
+    margin-top: 40px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg) 120%);
+  }
+  .board-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .board-head h2 {
+    margin: 0; font-family: "Fraunces", serif; font-weight: 500; font-size: 20px;
+  }
+  .board-head .hint { color: var(--dim); font-size: 12px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--glow); }
+  thead th .arrow { opacity: 0.5; font-size: 10px; }
+  th.num, td.num { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(6px);
+    animation: rise 0.5s ease forwards;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--panel-2); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  td { padding: 14px 22px; vertical-align: middle; }
+
+  .rank {
+    font-family: "Fraunces", serif; font-size: 22px; color: var(--dim); width: 42px;
+  }
+  tr:nth-child(1) .rank { color: var(--glow); }
+  tr:nth-child(2) .rank { color: #b9e9c9; }
+  tr:nth-child(3) .rank { color: var(--amber); }
+
+  .method { font-size: 15px; color: var(--ink); font-weight: 500; }
+  .method .sub { display: block; font-size: 11px; color: var(--dim); font-weight: 400; margin-top: 2px; }
+
+  .tag {
+    display: inline-block; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 5px; border: 1px solid var(--line); color: var(--muted);
+  }
+  .tag.dl { color: var(--glow); border-color: #2c5a40; background: #0f2419; }
+  .tag.classical { color: var(--amber); border-color: #4a3c1a; background: #221a0c; }
+  .tag.llm { color: #9db8ff; border-color: #2a3a63; background: #101626; }
+
+  .score-cell { min-width: 180px; }
+  .score-val { font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .bar {
+    margin-top: 6px; height: 5px; border-radius: 4px; background: var(--bar-track); overflow: hidden;
+  }
+  .bar > i {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, #2c8f63, var(--glow));
+    box-shadow: 0 0 8px var(--glow-soft);
+    width: 0;
+    transition: width 1s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .yr { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* ---- Footer ---- */
+  footer {
+    margin-top: 40px; color: var(--dim); font-size: 12px; line-height: 1.7;
+  }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--glow); }
+  .src-note {
+    border: 1px dashed var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;
+    color: var(--muted); font-size: 12.5px;
+  }
+  .src-note b { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    .meta { gap: 18px; }
+    td, thead th { padding-left: 14px; padding-right: 14px; }
+    .hide-sm { display: none; }
+    .score-cell { min-width: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow"><span class="dot"></span> Live mirror · refreshes daily</span>
+    <h1>The Tox21<br /><em>Leaderboard</em></h1>
+    <p class="lede">
+      Ten years after deep learning's &ldquo;ImageNet moment&rdquo; in drug discovery, methods are still
+      ranked on the original challenge: predicting <strong>twelve toxic effects</strong> of small molecules,
+      scored by mean AUC across endpoints. This is an independent display of the reproducible leaderboard
+      maintained by <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku on Hugging Face</a>
+      (see the <a href="https://arxiv.org/abs/2511.14744" target="_blank" rel="noopener">2025 paper</a>).
+    </p>
+
+    <div class="meta">
+      <div class="stat"><div class="k">Endpoints scored</div><div class="v">12 <small>assays</small></div></div>
+      <div class="stat"><div class="k">Metric</div><div class="v">AUC <small>mean ↑</small></div></div>
+      <div class="stat"><div class="k">Methods ranked</div><div class="v" id="stat-count">—</div></div>
+      <div class="stat"><div class="k">Updated</div><div class="v" id="stat-updated">—</div></div>
+    </div>
+  </header>
+
+  <section class="board">
+    <div class="board-head">
+      <h2>Standings</h2>
+      <span class="hint">Click a column to sort · click a row for per-assay AUC</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="rank">#</th>
+          <th data-sort="method">Method</th>
+          <th data-sort="type" class="hide-sm">Type</th>
+          <th data-sort="year" class="hide-sm num">Year</th>
+          <th data-sort="auc" class="num">Mean AUC <span class="arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    <div class="src-note">
+      <b>Note:</b> the figures shown below ship as <b>illustrative placeholder values</b> until the live data feed
+      is connected. The real standings come from the ml-jku Hugging Face leaderboard via a scheduled daily fetch
+      (see <code>scripts/fetch_data.py</code>). Replace <code>data.json</code> and these numbers update automatically.
+    </div>
+    Data source: <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku/tox21_leaderboard</a> ·
+    Original challenge: NIH/NCATS Tox21 Data Challenge (2014–2015) ·
+    This site is an unofficial mirror, not affiliated with the leaderboard maintainers.
+  </footer>
+</div>
+
+<script>
+  // The 12 Tox21 Challenge assay endpoints (7 nuclear-receptor + 5 stress-response).
+  const TARGETS = ["NR-AR","NR-AR-LBD","NR-AhR","NR-Aromatase","NR-ER","NR-ER-LBD",
+                   "NR-PPAR-gamma","SR-ARE","SR-ATAD5","SR-HSE","SR-MMP","SR-p53"];
+
+  // Placeholder/sample standings. Values are illustrative, NOT the real leaderboard scores.
+  // Structure mirrors what scripts/fetch_data.py will emit into data.json.
+  const SAMPLE = {
+    updated: null,
+    methods: [
+      { method: "DeepTox", note: "Original 2015 challenge winner", type: "dl", year: 2015, auc: 0.846 },
+      { method: "Self-Normalizing NN", note: "Descriptor-based SNN", type: "dl", year: 2017, auc: 0.842 },
+      { method: "Chemprop (D-MPNN)", note: "Message-passing GNN", type: "dl", year: 2023, auc: 0.835 },
+      { method: "Random Forest", note: "ECFP fingerprints", type: "classical", year: 2001, auc: 0.821 },
+      { method: "XGBoost", note: "Gradient-boosted trees", type: "classical", year: 2016, auc: 0.818 },
+      { method: "GIN", note: "Graph isomorphism network", type: "dl", year: 2018, auc: 0.811 },
+      { method: "TabPFN", note: "Tabular foundation model", type: "dl", year: 2023, auc: 0.804 },
+      { method: "GPT-OSS-120B", note: "In-context LLM", type: "llm", year: 2025, auc: 0.722 }
+    ]
+  };
+
+  const TYPE_LABEL = { dl: "Deep learning", classical: "Classical ML", llm: "LLM" };
+
+  let state = { data: null, sortKey: "auc", dir: -1 };
+
+  async function load() {
+    let data = null;
+    try {
+      const r = await fetch("data.json", { cache: "no-store" });
+      if (r.ok) data = await r.json();
+    } catch (e) { /* fall back to sample */ }
+    if (!data || !Array.isArray(data.methods) || !data.methods.length) data = SAMPLE;
+    state.data = data;
+    render();
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "sample data";
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    } catch { return iso; }
+  }
+
+  function render() {
+    const rows = document.getElementById("rows");
+    const methods = [...state.data.methods];
+    const maxAuc = Math.max(...methods.map(m => m.auc || 0));
+
+    methods.sort((a, b) => {
+      let av = a[state.sortKey], bv = b[state.sortKey];
+      if (state.sortKey === "rank") { av = a.auc; bv = b.auc; }
+      if (typeof av === "string") return state.dir * av.localeCompare(bv);
+      return state.dir * ((av || 0) - (bv || 0));
+    });
+
+    document.getElementById("stat-count").innerHTML = methods.length + ' <small>total</small>';
+    document.getElementById("stat-updated").innerHTML =
+      '<small>' + fmtDate(state.data.updated) + '</small>';
+
+    rows.innerHTML = "";
+    methods.forEach((m, i) => {
+      const tr = document.createElement("tr");
+      tr.style.animationDelay = (i * 45) + "ms";
+      const pct = maxAuc ? Math.round((m.auc / maxAuc) * 100) : 0;
+      tr.innerHTML = `
+        <td class="rank">${i + 1}</td>
+        <td><span class="method">${esc(m.method)}${m.note ? `<span class="sub">${esc(m.note)}</span>` : ""}</span></td>
+        <td class="hide-sm"><span class="tag ${m.type || ""}">${TYPE_LABEL[m.type] || (m.type || "—")}</span></td>
+        <td class="hide-sm num yr">${m.year || "—"}</td>
+        <td class="num score-cell">
+          <span class="score-val">${(m.auc != null ? m.auc.toFixed(3) : "—")}</span>
+          <span class="bar"><i data-w="${pct}"></i></span>
+        </td>`;
+      if (m.targets) {
+        tr.style.cursor = "pointer";
+        tr.addEventListener("click", () => alert(perAssay(m)));
+      }
+      rows.appendChild(tr);
+    });
+
+    // animate bars after layout
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".bar > i").forEach(b => { b.style.width = b.dataset.w + "%"; });
+    });
+  }
+
+  function perAssay(m) {
+    if (!m.targets) return m.method;
+    return m.method + "\n\n" + TARGETS.map(t =>
+      t.padEnd(14) + (m.targets[t] != null ? m.targets[t].toFixed(3) : "—")).join("\n");
+  }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+  document.querySelectorAll("thead th").forEach(th => {
+    th.addEventListener("click", () => {
+      const k = th.dataset.sort;
+      if (state.sortKey === k) state.dir *= -1;
+      else { state.sortKey = k; state.dir = (k === "method" || k === "type") ? 1 : -1; }
+      document.querySelectorAll("thead th .arrow").forEach(a => a.remove());
+      const ar = document.createElement("span");
+      ar.className = "arrow";
+      ar.textContent = state.dir === -1 ? " ▼" : " ▲";
+      th.appendChild(ar);
+      render();
+    });
+  });
+
+  load();
+</script>
+</body>
+</html>
