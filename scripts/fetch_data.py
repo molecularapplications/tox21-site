@@ -143,7 +143,7 @@ def fetch_rows():
 
     # --- Path B: datasets library (handles a gated dataset with HF_TOKEN) ---
     from datasets import load_dataset
-    token = os.environ.get("HF_TOKEN")
+    token = os.environ.get("HF_TOKEN") or None  # empty/absent secret -> anonymous read
     ds = load_dataset(RESULTS_DATASET, split=SPLIT, token=token)
     rows = list(ds)
     print(f"Read {len(rows)} rows via datasets library (token: {'yes' if token else 'no'}).")
