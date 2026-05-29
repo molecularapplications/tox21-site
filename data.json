@@ -1,0 +1,258 @@
+{
+  "updated": "2026-05-29T15:19:09Z",
+  "source": "ml-jku/tox21_leaderboard (snapshot)",
+  "methods": [
+    {
+      "method": "DeepTox",
+      "note": "JKU Linz \u00b7 original 2015 winner",
+      "type": "dl",
+      "year": 2015,
+      "auc": 0.847,
+      "targets": {
+        "NR-AR": 0.807,
+        "NR-AR-LBD": 0.85,
+        "NR-AhR": 0.928,
+        "NR-Aromatase": 0.834,
+        "NR-ER": 0.793,
+        "NR-ER-LBD": 0.815,
+        "NR-PPAR-gamma": 0.839,
+        "SR-ARE": 0.841,
+        "SR-ATAD5": 0.793,
+        "SR-HSE": 0.858,
+        "SR-MMP": 0.941,
+        "SR-p53": 0.862
+      }
+    },
+    {
+      "method": "SNN",
+      "note": "JKU Linz",
+      "type": "dl",
+      "year": 2017,
+      "auc": 0.844,
+      "targets": {
+        "NR-AR": 0.852,
+        "NR-AR-LBD": 0.918,
+        "NR-AhR": 0.897,
+        "NR-Aromatase": 0.789,
+        "NR-ER": 0.809,
+        "NR-ER-LBD": 0.814,
+        "NR-PPAR-gamma": 0.838,
+        "SR-ARE": 0.784,
+        "SR-ATAD5": 0.813,
+        "SR-HSE": 0.828,
+        "SR-MMP": 0.937,
+        "SR-p53": 0.849
+      }
+    },
+    {
+      "method": "CheMeleon",
+      "note": "MIT",
+      "type": "dl",
+      "year": 2025,
+      "auc": 0.838,
+      "targets": {
+        "NR-AR": 0.829,
+        "NR-AR-LBD": 0.873,
+        "NR-AhR": 0.913,
+        "NR-Aromatase": 0.808,
+        "NR-ER": 0.804,
+        "NR-ER-LBD": 0.784,
+        "NR-PPAR-gamma": 0.821,
+        "SR-ARE": 0.789,
+        "SR-ATAD5": 0.827,
+        "SR-HSE": 0.83,
+        "SR-MMP": 0.948,
+        "SR-p53": 0.826
+      }
+    },
+    {
+      "method": "RF",
+      "note": "JKU Linz",
+      "type": "classical",
+      "year": 2001,
+      "auc": 0.829,
+      "targets": {
+        "NR-AR": 0.781,
+        "NR-AR-LBD": 0.769,
+        "NR-AhR": 0.916,
+        "NR-Aromatase": 0.823,
+        "NR-ER": 0.814,
+        "NR-ER-LBD": 0.768,
+        "NR-PPAR-gamma": 0.832,
+        "SR-ARE": 0.8,
+        "SR-ATAD5": 0.809,
+        "SR-HSE": 0.841,
+        "SR-MMP": 0.946,
+        "SR-p53": 0.851
+      }
+    },
+    {
+      "method": "SNN Ensemble",
+      "note": "Rasayan Labs Inc.",
+      "type": "dl",
+      "year": null,
+      "auc": 0.827,
+      "targets": {
+        "NR-AR": 0.803,
+        "NR-AR-LBD": 0.874,
+        "NR-AhR": 0.916,
+        "NR-Aromatase": 0.772,
+        "NR-ER": 0.806,
+        "NR-ER-LBD": 0.744,
+        "NR-PPAR-gamma": 0.828,
+        "SR-ARE": 0.792,
+        "SR-ATAD5": 0.817,
+        "SR-HSE": 0.818,
+        "SR-MMP": 0.923,
+        "SR-p53": 0.827
+      }
+    },
+    {
+      "method": "XGBoost",
+      "note": "JKU Linz",
+      "type": "classical",
+      "year": 2016,
+      "auc": 0.823,
+      "targets": {
+        "NR-AR": 0.735,
+        "NR-AR-LBD": 0.804,
+        "NR-AhR": 0.912,
+        "NR-Aromatase": 0.822,
+        "NR-ER": 0.813,
+        "NR-ER-LBD": 0.789,
+        "NR-PPAR-gamma": 0.771,
+        "SR-ARE": 0.81,
+        "SR-ATAD5": 0.818,
+        "SR-HSE": 0.824,
+        "SR-MMP": 0.945,
+        "SR-p53": 0.827
+      }
+    },
+    {
+      "method": "GROVER",
+      "note": "Tencent AI Lab (finetuned by JKU Linz)",
+      "type": "dl",
+      "year": 2020,
+      "auc": 0.822,
+      "targets": {
+        "NR-AR": 0.847,
+        "NR-AR-LBD": 0.881,
+        "NR-AhR": 0.914,
+        "NR-Aromatase": 0.818,
+        "NR-ER": 0.767,
+        "NR-ER-LBD": 0.734,
+        "NR-PPAR-gamma": 0.815,
+        "SR-ARE": 0.794,
+        "SR-ATAD5": 0.772,
+        "SR-HSE": 0.779,
+        "SR-MMP": 0.919,
+        "SR-p53": 0.827
+      }
+    },
+    {
+      "method": "Chemprop",
+      "note": "MIT (trained by JKU Linz)",
+      "type": "dl",
+      "year": 2019,
+      "auc": 0.815,
+      "targets": {
+        "NR-AR": 0.839,
+        "NR-AR-LBD": 0.861,
+        "NR-AhR": 0.893,
+        "NR-Aromatase": 0.767,
+        "NR-ER": 0.818,
+        "NR-ER-LBD": 0.767,
+        "NR-PPAR-gamma": 0.772,
+        "SR-ARE": 0.748,
+        "SR-ATAD5": 0.788,
+        "SR-HSE": 0.805,
+        "SR-MMP": 0.914,
+        "SR-p53": 0.813
+      }
+    },
+    {
+      "method": "GIN",
+      "note": "MIT & Stanford (trained by JKU Linz)",
+      "type": "dl",
+      "year": 2018,
+      "auc": 0.81,
+      "targets": {
+        "NR-AR": 0.808,
+        "NR-AR-LBD": 0.882,
+        "NR-AhR": 0.89,
+        "NR-Aromatase": 0.773,
+        "NR-ER": 0.771,
+        "NR-ER-LBD": 0.778,
+        "NR-PPAR-gamma": 0.74,
+        "SR-ARE": 0.756,
+        "SR-ATAD5": 0.787,
+        "SR-HSE": 0.774,
+        "SR-MMP": 0.93,
+        "SR-p53": 0.836
+      }
+    },
+    {
+      "method": "TabPFN",
+      "note": "PriorLabs (trained by JKU Linz)",
+      "type": "dl",
+      "year": 2022,
+      "auc": 0.807,
+      "targets": {
+        "NR-AR": 0.753,
+        "NR-AR-LBD": 0.741,
+        "NR-AhR": 0.893,
+        "NR-Aromatase": 0.77,
+        "NR-ER": 0.782,
+        "NR-ER-LBD": 0.806,
+        "NR-PPAR-gamma": 0.793,
+        "SR-ARE": 0.798,
+        "SR-ATAD5": 0.787,
+        "SR-HSE": 0.816,
+        "SR-MMP": 0.942,
+        "SR-p53": 0.806
+      }
+    },
+    {
+      "method": "D-MPNN (chemprop)",
+      "note": "Independent Researcher",
+      "type": "dl",
+      "year": 2019,
+      "auc": 0.799,
+      "targets": {
+        "NR-AR": 0.797,
+        "NR-AR-LBD": 0.818,
+        "NR-AhR": 0.884,
+        "NR-Aromatase": 0.809,
+        "NR-ER": 0.767,
+        "NR-ER-LBD": 0.768,
+        "NR-PPAR-gamma": 0.761,
+        "SR-ARE": 0.797,
+        "SR-ATAD5": 0.736,
+        "SR-HSE": 0.733,
+        "SR-MMP": 0.914,
+        "SR-p53": 0.797
+      }
+    },
+    {
+      "method": "GPT-OSS",
+      "note": "OpenAI (inference by JKU Linz)",
+      "type": "llm",
+      "year": 2025,
+      "auc": 0.702,
+      "targets": {
+        "NR-AR": 0.558,
+        "NR-AR-LBD": 0.702,
+        "NR-AhR": 0.824,
+        "NR-Aromatase": 0.708,
+        "NR-ER": 0.688,
+        "NR-ER-LBD": 0.692,
+        "NR-PPAR-gamma": 0.676,
+        "SR-ARE": 0.707,
+        "SR-ATAD5": 0.646,
+        "SR-HSE": 0.763,
+        "SR-MMP": 0.732,
+        "SR-p53": 0.724
+      }
+    }
+  ]
+}
