@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tox21 Leaderboard — Toxicity Prediction Standings</title>
-<meta name="description" content="A live mirror of the reproducible Tox21 Challenge leaderboard: how machine-learning methods rank at predicting twelve toxic effects of small molecules." />
+<meta name="description" content="A plain-language companion to the reproducible Tox21 Challenge leaderboard: how machine-learning methods rank at predicting twelve toxic effects of small molecules — and what that actually means." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -217,31 +217,59 @@
   }
   footer a { color: var(--muted); }
   footer a:hover { color: var(--glow); }
-  .src-note {
-    border: 1px dashed var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;
-    color: var(--muted); font-size: 12.5px;
+  /* ---- Explainer ---- */
+  .explainer { margin-top: 56px; }
+  .explainer > h2, .resources > h2 {
+    font-family: "Fraunces", serif; font-weight: 500; font-size: 22px; margin: 0 0 18px;
   }
-  .src-note b { color: var(--ink); font-weight: 600; }
+  .ex-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .ex {
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px;
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg) 130%);
+  }
+  .ex h3 {
+    margin: 0 0 8px; font-size: 12.5px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500;
+  }
+  .ex p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.65; }
+  .ex strong { color: var(--ink); font-weight: 600; }
+  .ex em { color: var(--ink); font-style: italic; }
+
+  /* ---- Resources ---- */
+  .resources { margin-top: 44px; }
+  .links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .links a {
+    display: flex; flex-direction: column; gap: 3px;
+    border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px;
+    color: var(--ink); text-decoration: none; font-size: 14px; background: var(--panel);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .links a:hover { border-color: var(--glow); background: var(--panel-2); }
+  .links a span { color: var(--dim); font-size: 11px; letter-spacing: 0.04em; }
 
   @media (max-width: 640px) {
     .meta { gap: 18px; }
     td, thead th { padding-left: 14px; padding-right: 14px; }
     .hide-sm { display: none; }
     .score-cell { min-width: 120px; }
+    .ex-grid, .links { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <span class="eyebrow"><span class="dot"></span> Live mirror · refreshes daily</span>
+    <span class="eyebrow"><span class="dot"></span> Sourced from the ml-jku leaderboard</span>
     <h1>The Tox21<br /><em>Leaderboard</em></h1>
     <p class="lede">
       Ten years after deep learning's &ldquo;ImageNet moment&rdquo; in drug discovery, methods are still
-      ranked on the original challenge: predicting <strong>twelve toxic effects</strong> of small molecules,
-      scored by mean AUC across endpoints. This is an independent display of the reproducible leaderboard
-      maintained by <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku on Hugging Face</a>
-      (see the <a href="https://arxiv.org/abs/2511.14744" target="_blank" rel="noopener">2025 paper</a>).
+      ranked on the original challenge: from a molecule's chemical structure alone, predict whether it trips
+      <strong>twelve biological alarms</strong> linked to toxicity &mdash; the sort of screening that otherwise
+      demands slow, expensive lab and animal testing. Models are scored by mean AUC across those twelve endpoints.
+      This is an independent, plain-language view of the reproducible leaderboard maintained by
+      <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku on Hugging Face</a>
+      (see the <a href="https://arxiv.org/abs/2511.14744" target="_blank" rel="noopener">2025 paper</a>). The striking
+      part: the methods on top today are largely the same ones from 2015&ndash;2017.
     </p>
 
     <div class="meta">
@@ -271,15 +299,56 @@
     </table>
   </section>
 
-  <footer>
-    <div class="src-note">
-      <b>Note:</b> the figures shown below ship as <b>illustrative placeholder values</b> until the live data feed
-      is connected. The real standings come from the ml-jku Hugging Face leaderboard via a scheduled daily fetch
-      (see <code>scripts/fetch_data.py</code>). Replace <code>data.json</code> and these numbers update automatically.
+  <section class="explainer">
+    <h2>Tox21, in plain terms</h2>
+    <div class="ex-grid">
+      <div class="ex">
+        <h3>What is Tox21?</h3>
+        <p>A US federal research program &mdash; a collaboration of the <strong>EPA, FDA, and NIH</strong>
+        (through NCATS and the NIEHS National Toxicology Program), running since 2008. Using robotic,
+        cell-based lab tests, it screens roughly 10,000 chemicals for early signs of harm far faster and
+        cheaper than traditional animal testing, to flag which ones deserve a closer look.</p>
+      </div>
+      <div class="ex">
+        <h3>What are the models predicting?</h3>
+        <p>Given nothing but a molecule's <strong>chemical structure</strong>, each model guesses whether the
+        compound will set off specific biological responses tied to toxicity &mdash; no lab, no animals, just the
+        structure. In 2014 a slice of the Tox21 data was released as a public competition to test how well
+        machines could do exactly this.</p>
+      </div>
+      <div class="ex">
+        <h3>The twelve assays</h3>
+        <p>Each scored column is one lab test. Seven probe <strong>nuclear receptors</strong> (hormone-signaling
+        switches, such as the estrogen and androgen receptors) and five probe <strong>stress-response pathways</strong>
+        (cellular alarms for DNA damage, oxidative stress, and mitochondrial harm). A &ldquo;hit&rdquo; points to a
+        route by which a chemical might cause harm.</p>
+      </div>
+      <div class="ex">
+        <h3>How to read the score</h3>
+        <p>Performance is <strong>AUC</strong>, from 0.5 to 1.0. Picture it this way: shown one toxic and one safe
+        molecule, an AUC of <strong>0.85</strong> means the model ranks the toxic one higher about 85% of the time.
+        <strong>0.5</strong> is a coin flip; <strong>1.0</strong> is perfect. The <em>Type</em> tag notes how a model
+        was built &mdash; trained from scratch, pre-trained, or run zero-shot.</p>
+      </div>
     </div>
-    Data source: <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku/tox21_leaderboard</a> ·
-    Original challenge: NIH/NCATS Tox21 Data Challenge (2014–2015) ·
-    This site is an unofficial mirror, not affiliated with the leaderboard maintainers.
+  </section>
+
+  <section class="resources">
+    <h2>Learn more</h2>
+    <div class="links">
+      <a href="https://tox21.gov/" target="_blank" rel="noopener">Tox21 program (official)<span>tox21.gov</span></a>
+      <a href="https://tripod.nih.gov/tox21/" target="_blank" rel="noopener">Tox21 data browser &amp; challenge<span>tripod.nih.gov</span></a>
+      <a href="https://huggingface.co/datasets/ml-jku/tox21" target="_blank" rel="noopener">The challenge dataset<span>huggingface.co</span></a>
+      <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">The ml-jku leaderboard<span>huggingface.co</span></a>
+      <a href="https://arxiv.org/abs/2511.14744" target="_blank" rel="noopener">The 2025 reproducibility paper<span>arXiv</span></a>
+      <a href="https://bioinf.jku.at/research/DeepTox/tox21.html" target="_blank" rel="noopener">DeepTox &amp; the original data<span>bioinf.jku.at</span></a>
+    </div>
+  </section>
+
+  <footer>
+    Data source: <a href="https://huggingface.co/spaces/ml-jku/tox21_leaderboard" target="_blank" rel="noopener">ml-jku/tox21_leaderboard</a>, captured as a snapshot ·
+    Original challenge: NIH/NCATS Tox21 Data Challenge (2014) ·
+    This site is an independent, plain-language companion — not affiliated with the leaderboard maintainers or the Tox21 program.
   </footer>
 </div>
 
