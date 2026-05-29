@@ -234,6 +234,7 @@
   .ex p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.65; }
   .ex strong { color: var(--ink); font-weight: 600; }
   .ex em { color: var(--ink); font-style: italic; }
+  .ex.wide { grid-column: 1 / -1; }
 
   /* ---- Resources ---- */
   .resources { margin-top: 44px; }
@@ -329,6 +330,16 @@
         molecule, an AUC of <strong>0.85</strong> means the model ranks the toxic one higher about 85% of the time.
         <strong>0.5</strong> is a coin flip; <strong>1.0</strong> is perfect. The <em>Type</em> tag notes how a model
         was built &mdash; trained from scratch, pre-trained, or run zero-shot.</p>
+      </div>
+      <div class="ex wide">
+        <h3>Why it matters</h3>
+        <p>Conventional toxicity testing leans heavily on <strong>animal studies</strong> &mdash; slow, costly, and
+        ethically fraught. Cutting that reliance is an explicit Tox21 goal: move first-pass screening to cell-based
+        tests, and further still to computational models like these, which judge a molecule from its structure alone
+        &mdash; <strong>no animals, and no new wet-lab assay at all</strong>. Used to decide which handful of chemicals
+        genuinely warrant deeper study, sharper predictions mean fewer animal tests overall &mdash; the core promise
+        behind toxicology's shift toward <strong>New Approach Methodologies</strong> and the long-standing goal of
+        replacing, reducing, and refining animal use.</p>
       </div>
     </div>
   </section>
